@@ -88,6 +88,30 @@ class C10_API Scalar {
 
   Scalar operator-() const;
   Scalar conj() const;
+  Scalar log() const;
+
+  template<typename T>
+  bool equal(T num) const {
+    if (isComplex()) {
+      return v.z == num;
+    } else if (isFloatingPoint()) {
+      return v.d == num;
+    } else if (isIntegral(/*includeBool=*/false)) {
+      return v.i == num;
+    } else {
+      // boolean scalar
+      return false;
+    }
+  }
+
+  bool equal(bool num) const {
+    if (isBoolean()) {
+      return static_cast<bool>(v.i) == num;
+    } else {
+      return false;
+    }
+  }
+
   ScalarType type() const {
     if (isComplex()) {
       return ScalarType::ComplexDouble;
